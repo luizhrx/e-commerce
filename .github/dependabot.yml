@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # Configuração para o Maven (Java)
+  - package-ecosystem: "maven"
+    directory: "/"       # Onde está o seu pom.xml (na raiz do projeto)
+    schedule:
+      interval: "weekly" # O robô vai checar por atualizações toda semana
