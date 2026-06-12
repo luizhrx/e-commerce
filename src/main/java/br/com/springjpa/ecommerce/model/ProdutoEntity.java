@@ -33,7 +33,6 @@ public class ProdutoEntity {
     private BigDecimal preco;
 
     @Column(nullable = false)
-    @Min(0)
     private Integer quantidadeStock;
 
     @ManyToOne()

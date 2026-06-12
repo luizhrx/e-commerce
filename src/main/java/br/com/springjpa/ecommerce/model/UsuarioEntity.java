@@ -29,7 +29,6 @@ public class UsuarioEntity {
     private String email;
 
     @Column(nullable = false)
-    @Size(min = 6,message = "A senha deve conter no mínimo 6 caracteres")
     private String senha;
 
     @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL,orphanRemoval = true)
