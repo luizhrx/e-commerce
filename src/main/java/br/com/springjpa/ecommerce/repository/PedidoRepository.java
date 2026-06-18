@@ -1,5 +1,6 @@
 package br.com.springjpa.ecommerce.repository;
 
+import br.com.springjpa.ecommerce.enums.StatusPedido;
 import br.com.springjpa.ecommerce.model.PedidoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,11 +19,11 @@ public interface PedidoRepository extends JpaRepository<PedidoEntity, Long> {
     List<PedidoEntity> findByUsuarioIdAndStatus(Long usuarioId, String status);
 
     // Pedidos em um período específico
-    List<PedidoEntity> findByDataPedidoBetween(LocalDateTime inicio, LocalDateTime fim);
+    List<PedidoEntity> findByDataCriacaoBetween(LocalDateTime inicio, LocalDateTime fim);
 
     //Pedidos de uma usuario ordenados por data
-    List<PedidoEntity> findByUsuarioIdOrderByDataPedidoDesc(Long usuarioId);
+    List<PedidoEntity> findByUsuarioIdOrderByDataCriacaoDesc(Long usuarioId);
 
     // Contagem de pedidos por status
-    long countByStatus(String status);
+    long countByStatus(StatusPedido status);
 }

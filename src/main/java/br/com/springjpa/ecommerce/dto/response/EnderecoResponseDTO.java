@@ -9,7 +9,6 @@ public record EnderecoResponseDTO(
         String cidade,
         String estado,
         String cep,
-        Long usuarioId,
         String usuarioNome
 ) {
 }

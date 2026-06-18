@@ -8,7 +8,6 @@ public record ProdutoResponseDTO(
         String descricao,
         BigDecimal preco,
         Integer quantidadeStock,
-        Long categoriaId,
         String categoriaNome
 ) {
 }
