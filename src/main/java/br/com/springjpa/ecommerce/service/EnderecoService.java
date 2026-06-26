@@ -2,9 +2,7 @@ package br.com.springjpa.ecommerce.service;
 
 import br.com.springjpa.ecommerce.dto.request.EnderecoRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.EnderecoResponseDTO;
-import br.com.springjpa.ecommerce.infra.exception.EntidadeJaCadastrada;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
-import br.com.springjpa.ecommerce.model.Endereco;
 import br.com.springjpa.ecommerce.model.EnderecoEntity;
 import br.com.springjpa.ecommerce.model.UsuarioEntity;
 import br.com.springjpa.ecommerce.repository.EnderecoRepository;
@@ -40,9 +38,8 @@ public class EnderecoService {
     }
 
     // Método para listar endereços de um usuário em uma cidade específica
-    @Transactional(readOnly = true)
     public List<EnderecoResponseDTO> listarEnderecosPorUsuarioECidade(Long usuarioId, String cidade) {
-        return enderecoRepository.findByUsuarioIdAndEnderecoCidade(usuarioId, cidade).stream()
+        return enderecoRepository.findByUsuarioIdAndCidade(usuarioId, cidade).stream()
                 .map(this::toResponseDTO)
                 .toList();
     }

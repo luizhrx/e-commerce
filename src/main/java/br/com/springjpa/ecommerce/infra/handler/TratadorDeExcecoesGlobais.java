@@ -10,13 +10,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class TratadorDeExcecoesGlobais extends ResponseEntityExceptionHandler {
+public class TratadorDeExcecoesGlobais {
 
     // Tratamento genérico para exceções não tratadas especificamente
     @ExceptionHandler(Exception.class)
@@ -97,6 +98,19 @@ public class TratadorDeExcecoesGlobais extends ResponseEntityExceptionHandler {
                 ex.getMessage()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErroResponse> tratarTipoArgumentoInvalido(MethodArgumentTypeMismatchException ex) {
+        String mensagem = "Valor inválido para o parâmetro '" + ex.getName() +
+                "': " + ex.getValue();
+
+        ErroResponse erro = new ErroResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                mensagem
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
 }

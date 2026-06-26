@@ -12,7 +12,8 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> 
     List<EnderecoEntity> findByUsuarioId(Long usuarioId);
 
     // Endereços de um usuário em uma cidade específica
-    List<EnderecoEntity> findByUsuarioIdAndEnderecoCidade(Long usuarioId, String cidade);
+    // Corrija para:
+    List<EnderecoEntity> findByUsuarioIdAndCidade(Long usuarioId, String cidade);
 
     // Verifica se um usuário possui endereços cadastrados
     boolean existsByUsuarioId(Long usuarioId);

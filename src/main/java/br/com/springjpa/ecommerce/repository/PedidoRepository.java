@@ -13,10 +13,10 @@ public interface PedidoRepository extends JpaRepository<PedidoEntity, Long> {
     List<PedidoEntity> findByUsuarioId(Long usuarioId);
 
     // Pedidos com um status específico
-    List<PedidoEntity> findByStatus(String status);
+    List<PedidoEntity> findByStatus(StatusPedido status);
 
     // Pedidos de um usuário com um status específico
-    List<PedidoEntity> findByUsuarioIdAndStatus(Long usuarioId, String status);
+    List<PedidoEntity> findByUsuarioIdAndStatus(Long usuarioId, StatusPedido status);
 
     // Pedidos em um período específico
     List<PedidoEntity> findByDataCriacaoBetween(LocalDateTime inicio, LocalDateTime fim);

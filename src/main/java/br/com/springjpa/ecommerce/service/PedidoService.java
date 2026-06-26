@@ -2,8 +2,6 @@ package br.com.springjpa.ecommerce.service;
 
 import br.com.springjpa.ecommerce.dto.request.ItemPedidoRequestDTO;
 import br.com.springjpa.ecommerce.dto.request.PedidoRequestDTO;
-import br.com.springjpa.ecommerce.dto.request.ProdutoRequestDTO;
-import br.com.springjpa.ecommerce.dto.request.UsuarioRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.*;
 import br.com.springjpa.ecommerce.enums.StatusPedido;
 import br.com.springjpa.ecommerce.infra.exception.EnderecoNaoPertenceAoUsuarioException;
@@ -13,13 +11,11 @@ import br.com.springjpa.ecommerce.infra.exception.TransicaoStatusInvalidaExcepti
 import br.com.springjpa.ecommerce.model.Endereco;
 import br.com.springjpa.ecommerce.model.ItemPedidoEntity;
 import br.com.springjpa.ecommerce.model.PedidoEntity;
-import br.com.springjpa.ecommerce.model.UsuarioEntity;
 import br.com.springjpa.ecommerce.repository.EnderecoRepository;
 import br.com.springjpa.ecommerce.repository.PedidoRepository;
 import br.com.springjpa.ecommerce.repository.ProdutoRepository;
 import br.com.springjpa.ecommerce.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +52,7 @@ public class PedidoService {
     // Método para listar pedidos com um status especificos
     @Transactional(readOnly = true)
     public List<PedidoResponseDTO> listarPedidosPorStatus(StatusPedido status){
-        return pedidoRepository.findByStatus(status.name()).stream()
+        return pedidoRepository.findByStatus(status).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -64,7 +60,7 @@ public class PedidoService {
     // Método para listar todos os pedidos de um usuário com um status específico
     @Transactional(readOnly = true)
     public List<PedidoResponseDTO> getPedidosAtivosPorUsuario(Long usuarioId, StatusPedido status){
-        return pedidoRepository.findByUsuarioIdAndStatus(usuarioId,status.name()).stream()
+        return pedidoRepository.findByUsuarioIdAndStatus(usuarioId, status).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -95,9 +91,9 @@ public class PedidoService {
 
     // Método que retorna a contagem de todos os status
     @Transactional(readOnly = true)
-    public List<ContagemStatusDto> resumoDashboard(){
+    public List<ContagemStatusDTO> resumoDashboard(){
         return Arrays.stream(StatusPedido.values())
-                .map(status -> new ContagemStatusDto(status, pedidoRepository.countByStatus(status)))
+                .map(status -> new ContagemStatusDTO(status, pedidoRepository.countByStatus(status)))
                 .toList();
     }
 

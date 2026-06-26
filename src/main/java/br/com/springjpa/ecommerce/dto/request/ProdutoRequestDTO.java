@@ -18,7 +18,7 @@ public record ProdutoRequestDTO(
         BigDecimal preco,
 
         @NotNull(message = "O estoque do produto é obrigatório")
-        @Size(min = 0, message = "A quantidade em estoque deve ser maior ou igual a zero")
+        @Min(value = 0, message = "O estoque deve ser maior ou igual a zero")
         Integer quantidadeStock,
 
         @NotNull(message = "A categoria do produto é obrigatória")

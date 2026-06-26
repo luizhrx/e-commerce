@@ -5,9 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
-public interface ProdutoRepository extends JpaRepository<ProdutoEntity, Long> {
+public interface ProdutoRepository extends JpaRepository<ProdutoEntity, Long>{
 
     // Produtos de uma categoria
     List<ProdutoEntity> findByCategoriaId(Long categoriaId);

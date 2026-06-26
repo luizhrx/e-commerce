@@ -30,7 +30,7 @@ public class CategoriaService {
 
     // Método para buscar uma categoria pelo nome
     @Transactional(readOnly = true)
-    public CategoriaResponseDTO buscarCategoriaPorNome(String nome) {
+    public CategoriaResponseDTO buscarUmaCategoriaPorNome(String nome) {
         return categoriaRepository.findByNome(nome)
                 .map(this::toResponseDTO)
                 .orElseThrow(()-> new EntidadeNaoEncontrada("Categoria não encontrada"));
