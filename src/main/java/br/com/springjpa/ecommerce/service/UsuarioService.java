@@ -57,21 +57,6 @@ public class UsuarioService {
                 .toList();
     }
 
-    // Método para criar um novo usuário
-    public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto){
-        if(usuarioRepository.existsByEmail(dto.email())){
-            throw new EntidadeJaCadastrada("Email já cadastrado");
-        }
-
-        var usuario = new UsuarioEntity();
-        usuario.setNome(dto.nome());
-        usuario.setEmail(dto.email());
-        usuario.setSenha(passwordEncoder.encode(dto.senha()));
-
-        var usuarioSalvo = usuarioRepository.save(usuario);
-        return toResponseDto(usuarioSalvo);
-    }
-
     // Método para atualizar um usuário existente
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO dto){
         var usuario = usuarioRepository.findById(id)

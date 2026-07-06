@@ -41,12 +41,6 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuario);
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> cadastarUsuario(@RequestBody @Valid UsuarioRequestDTO dto){
-        var usuario = usuarioService.criarUsuario(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@PathVariable Long id, @RequestBody @Valid UsuarioRequestDTO dto){
         var usuario = usuarioService.atualizarUsuario(id, dto);
