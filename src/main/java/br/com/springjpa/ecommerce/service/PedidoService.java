@@ -4,6 +4,7 @@ import br.com.springjpa.ecommerce.dto.request.ItemPedidoRequestDTO;
 import br.com.springjpa.ecommerce.dto.request.PedidoRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.*;
 import br.com.springjpa.ecommerce.enums.StatusPedido;
+import br.com.springjpa.ecommerce.infra.config.SecurityUtils;
 import br.com.springjpa.ecommerce.infra.exception.EnderecoNaoPertenceAoUsuarioException;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
 import br.com.springjpa.ecommerce.infra.exception.EstoqueInsuficienteException;
@@ -32,6 +33,7 @@ public class PedidoService {
     private final UsuarioRepository usuarioRepository;
     private final EnderecoRepository enderecoRepository;
     private final ProdutoRepository produtoRepository;
+    private final SecurityUtils securityUtils;
 
     // Método para listar todos os pedidos
     @Transactional(readOnly = true)
@@ -44,6 +46,7 @@ public class PedidoService {
     // Método para listar todos os pedidos de um usuário
     @Transactional(readOnly = true)
     public List<PedidoResponseDTO> listarPedidosPorUsuario(Long id){
+        securityUtils.verificarProprietario(id);
         return pedidoRepository.findByUsuarioId(id).stream()
                 .map(this::toResponse)
                 .toList();
@@ -100,6 +103,7 @@ public class PedidoService {
 
     // Método para criar um pedido
     public PedidoResponseDTO criarPedido(Long usuarioId,PedidoRequestDTO dto){
+        securityUtils.verificarProprietario(usuarioId);
 
         var usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(()-> new EntidadeNaoEncontrada("Usuario não encontrado"));

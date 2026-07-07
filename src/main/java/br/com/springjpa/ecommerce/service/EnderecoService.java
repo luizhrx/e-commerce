@@ -2,6 +2,7 @@ package br.com.springjpa.ecommerce.service;
 
 import br.com.springjpa.ecommerce.dto.request.EnderecoRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.EnderecoResponseDTO;
+import br.com.springjpa.ecommerce.infra.config.SecurityUtils;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
 import br.com.springjpa.ecommerce.model.EnderecoEntity;
 import br.com.springjpa.ecommerce.model.UsuarioEntity;
@@ -20,6 +21,7 @@ public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final SecurityUtils securityUtils;
 
     // Método para listar todos os endereços
     @Transactional(readOnly = true)
@@ -32,6 +34,8 @@ public class EnderecoService {
     // Método para listar endereços por usuário
     @Transactional(readOnly = true)
     public List<EnderecoResponseDTO> listarEnderecosPorUsuario(Long usuarioId) {
+        securityUtils.verificarProprietario(usuarioId);
+
         return enderecoRepository.findByUsuarioId(usuarioId).stream()
                 .map(this::toResponseDTO)
                 .toList();
@@ -39,6 +43,8 @@ public class EnderecoService {
 
     // Método para listar endereços de um usuário em uma cidade específica
     public List<EnderecoResponseDTO> listarEnderecosPorUsuarioECidade(Long usuarioId, String cidade) {
+        securityUtils.verificarProprietario(usuarioId);
+
         return enderecoRepository.findByUsuarioIdAndCidade(usuarioId, cidade).stream()
                 .map(this::toResponseDTO)
                 .toList();
@@ -46,6 +52,8 @@ public class EnderecoService {
 
     // Método para criar um novo endereço para um usuário
     public EnderecoResponseDTO criarEndereco(Long usuarioId, EnderecoRequestDTO dto) {
+        securityUtils.verificarProprietario(usuarioId);
+
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Usuário não encontrado com ID: " + usuarioId));
 

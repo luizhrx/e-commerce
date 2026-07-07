@@ -2,6 +2,7 @@ package br.com.springjpa.ecommerce.service;
 
 import br.com.springjpa.ecommerce.dto.request.UsuarioRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.UsuarioResponseDTO;
+import br.com.springjpa.ecommerce.infra.config.SecurityUtils;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeJaCadastrada;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
 import br.com.springjpa.ecommerce.model.UsuarioEntity;
@@ -20,6 +21,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtils securityUtils;
 
     // Método para listar todos os usuários
     @Transactional(readOnly = true)
@@ -59,6 +61,8 @@ public class UsuarioService {
 
     // Método para atualizar um usuário existente
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO dto){
+        securityUtils.verificarProprietario(id);
+
         var usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Usuário não encontrado"));
 
@@ -76,6 +80,8 @@ public class UsuarioService {
 
     // Método para deletar um usuário por ID
     public void deletarUsuario(Long id){
+        securityUtils.verificarProprietario(id);
+
         var usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Usuário não encontrado"));
 

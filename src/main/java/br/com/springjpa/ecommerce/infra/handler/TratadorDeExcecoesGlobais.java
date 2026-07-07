@@ -153,4 +153,17 @@ public class TratadorDeExcecoesGlobais {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
     }
 
+    @ExceptionHandler(AcessoNegadoException.class)
+    public ResponseEntity<ErroResponse> tratarAcessoNegadoException(AcessoNegadoException ex) {
+        String mensagem = "Erro ao tentar acessar este recurso";
+
+        ErroResponse erro = new ErroResponse(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                mensagem
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
+    }
+
+
 }
