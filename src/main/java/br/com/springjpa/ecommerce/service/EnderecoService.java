@@ -74,6 +74,8 @@ public class EnderecoService {
 
     // Método para atualizar um endereço existente
     public EnderecoResponseDTO atualizarEndereco(Long enderecoId, EnderecoRequestDTO dto) {
+        securityUtils.verificarProprietario(enderecoId);
+
         var enderecoEntity = enderecoRepository.findById(enderecoId)
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Endereço não encontrado com ID: " + enderecoId));
 
@@ -82,7 +84,7 @@ public class EnderecoService {
         enderecoEntity.setComplemento(dto.complemento());
         enderecoEntity.setBairro(dto.bairro());
         enderecoEntity.setCidade(dto.cidade());
-        enderecoEntity.setEstado(dto.bairro());
+        enderecoEntity.setEstado(dto.estado());
         enderecoEntity.setCep(dto.cep());
 
         EnderecoEntity enderecoNovo = enderecoRepository.save(enderecoEntity);

@@ -28,9 +28,6 @@ public class JwtService {
     // Gera o Token
     public String gerarToken(UsuarioEntity user){
 
-        System.out.println("Gerando token para: " + user.getUsername());
-        System.out.println("Email do usuario: " + user.getEmail());
-
         return Jwts.builder()
                 .subject(user.getUsername())   // email do usuário
                 .issuedAt(new Date())          // quando foi gerado

@@ -40,6 +40,6 @@ public class Endereco {
     private String estado;
 
     @Column(nullable = false, length = 8)
-    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "CEP deve estar no formato XXXXX-XXX")
+    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "CEP deve estar no formato XXXXX-XXX ou XXXXXXXX")
     private String cep;
 }

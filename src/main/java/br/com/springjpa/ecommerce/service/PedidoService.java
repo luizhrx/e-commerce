@@ -170,6 +170,13 @@ public class PedidoService {
         }
 
         pedido.setStatus(novoStatus);
+
+        if (pedido.getStatus() != StatusPedido.CANCELADO && novoStatus == StatusPedido.CANCELADO) {
+            for (ItemPedidoEntity item : pedido.getItens()){
+                var produto = item.getProduto();
+                produto.setQuantidadeStock(produto.getQuantidadeStock() + item.getQuantidade());
+            }
+        }
         var pedidoAtualizado = pedidoRepository.save(pedido);
         return toResponse(pedidoAtualizado);
     }
