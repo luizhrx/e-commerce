@@ -3,6 +3,7 @@ package br.com.springjpa.ecommerce.service;
 import br.com.springjpa.ecommerce.dto.request.LoginRequestDTO;
 import br.com.springjpa.ecommerce.dto.request.RegistroRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.LoginResponseDTO;
+import br.com.springjpa.ecommerce.dto.response.UsuarioLoginDTO;
 import br.com.springjpa.ecommerce.enums.RoleEnum;
 import br.com.springjpa.ecommerce.infra.config.JwtService;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeJaCadastrada;
@@ -59,6 +60,17 @@ public class AuthService {
 
         var token = jwtService.gerarToken(usuario);
 
-        return new LoginResponseDTO("Login realizado com sucesso", token);
+        String role = usuario.getRole() != null && usuario.getRole().getNome() != null
+                ? usuario.getRole().getNome().name().replaceFirst("^ROLE_", "")
+                : null;
+
+        var usuarioLoginDto = new UsuarioLoginDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                role
+        );
+
+        return new LoginResponseDTO(token, usuarioLoginDto);
     }
 }

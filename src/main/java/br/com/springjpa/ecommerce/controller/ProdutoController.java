@@ -25,6 +25,12 @@ public class ProdutoController {
         return ResponseEntity.ok(produtos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> listarProdutoPorId(@PathVariable Long id){
+        var produto = produtoService.listarProdutosPorId(id);
+        return ResponseEntity.ok(produto);
+    }
+
     @GetMapping("/nome")
     public ResponseEntity<List<ProdutoResponseDTO>> listarProdutosPorNome(@RequestParam String nome,@RequestParam(required = false) Long categoriaId){
 
@@ -67,7 +73,7 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(produto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Long id,@RequestBody @Valid ProdutoRequestDTO dto){
         var  produto = produtoService.atualizarProduto(id, dto);
         return ResponseEntity.ok(produto);

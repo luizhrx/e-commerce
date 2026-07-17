@@ -33,6 +33,14 @@ public class ProdutoService {
                 .toList();
     }
 
+    // Método para listar produtos por ID
+    @Transactional(readOnly = true)
+    public ProdutoResponseDTO listarProdutosPorId(Long id) {
+        return produtoRepository.findById(id)
+                .map(this::toResponseDTO)
+                .orElseThrow(() -> new EntidadeNaoEncontrada("Produto não encontrado"));
+    }
+
     // Método para listar produtos por nome
     @Transactional(readOnly = true)
     public List<ProdutoResponseDTO> listarProdutosPorNome(String nome) {
@@ -92,6 +100,7 @@ public class ProdutoService {
         produto.setPreco(dto.preco());
         produto.setQuantidadeStock(dto.quantidadeStock());
         produto.setCategoria(categoria);
+        produto.setImagem(dto.imagem());
 
         var produtoSalvo = produtoRepository.save(produto);
         return toResponseDTO(produtoSalvo);
@@ -110,6 +119,7 @@ public class ProdutoService {
         produto.setPreco(dto.preco());
         produto.setQuantidadeStock(dto.quantidadeStock());
         produto.setCategoria(categoria);
+        produto.setImagem(dto.imagem());
 
         var produtoAtualizado = produtoRepository.save(produto);
         return toResponseDTO(produtoAtualizado);
@@ -134,7 +144,8 @@ public class ProdutoService {
                 produto.getDescricao(),
                 produto.getPreco(),
                 produto.getQuantidadeStock(),
-                produto.getCategoria().getNome()
+                produto.getCategoria().getNome(),
+                produto.getImagem()
         );
     }
 }

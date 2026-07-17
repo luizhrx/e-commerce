@@ -34,6 +34,8 @@ public class ProdutoEntity {
     @Column(nullable = false)
     private Integer quantidadeStock;
 
+    private String imagem;
+
     @ManyToOne()
     @JoinColumn(name = "categoria_id",nullable = false)
     private CategoriaEntity categoria; //Vários produtos para uma categoria

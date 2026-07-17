@@ -42,6 +42,7 @@ public class EnderecoService {
     }
 
     // Método para listar endereços de um usuário em uma cidade específica
+    @Transactional(readOnly = true)
     public List<EnderecoResponseDTO> listarEnderecosPorUsuarioECidade(Long usuarioId, String cidade) {
         securityUtils.verificarProprietario(usuarioId);
 
