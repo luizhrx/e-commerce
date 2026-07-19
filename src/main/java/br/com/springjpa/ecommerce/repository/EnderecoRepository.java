@@ -1,10 +1,10 @@
 package br.com.springjpa.ecommerce.repository;
 
-import br.com.springjpa.ecommerce.model.Endereco;
 import br.com.springjpa.ecommerce.model.EnderecoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> {
 
@@ -17,4 +17,7 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> 
 
     // Verifica se um usuário possui endereços cadastrados
     boolean existsByUsuarioId(Long usuarioId);
+
+    //Busca um endereço específico do usuário combinando CEP e Número da casa
+    Optional<EnderecoEntity> findByUsuarioIdAndCepAndNumero(Long usuarioId, String cep, String numero);
 }

@@ -4,6 +4,7 @@ import br.com.springjpa.ecommerce.dto.request.EnderecoRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.EnderecoResponseDTO;
 import br.com.springjpa.ecommerce.infra.config.SecurityUtils;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
+import br.com.springjpa.ecommerce.model.Endereco;
 import br.com.springjpa.ecommerce.model.EnderecoEntity;
 import br.com.springjpa.ecommerce.model.UsuarioEntity;
 import br.com.springjpa.ecommerce.repository.EnderecoRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -57,6 +59,12 @@ public class EnderecoService {
 
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Usuário não encontrado com ID: " + usuarioId));
+
+        Optional<EnderecoEntity> enderecoExistente = enderecoRepository.findByUsuarioIdAndCepAndNumero(usuarioId, dto.cep(), dto.numero());
+
+        if (enderecoExistente.isPresent()){
+            return  toResponseDTO(enderecoExistente.get());
+        }
 
         var endereco = new EnderecoEntity();
         endereco.setRua(dto.rua());
