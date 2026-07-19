@@ -7,7 +7,6 @@ import br.com.springjpa.ecommerce.dto.response.UsuarioLoginDTO;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
 import br.com.springjpa.ecommerce.repository.UsuarioRepository;
 import br.com.springjpa.ecommerce.service.AuthService;
-import br.com.springjpa.ecommerce.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

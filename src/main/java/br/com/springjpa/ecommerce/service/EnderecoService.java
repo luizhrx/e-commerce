@@ -4,7 +4,6 @@ import br.com.springjpa.ecommerce.dto.request.EnderecoRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.EnderecoResponseDTO;
 import br.com.springjpa.ecommerce.infra.config.SecurityUtils;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
-import br.com.springjpa.ecommerce.model.Endereco;
 import br.com.springjpa.ecommerce.model.EnderecoEntity;
 import br.com.springjpa.ecommerce.model.UsuarioEntity;
 import br.com.springjpa.ecommerce.repository.EnderecoRepository;
