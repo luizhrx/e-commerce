@@ -34,6 +34,7 @@ public class ProdutoEntity {
     @Column(nullable = false)
     private Integer quantidadeStock;
 
+    @Column(columnDefinition = "TEXT")
     private String imagem;
 
     @ManyToOne()
