@@ -83,7 +83,6 @@ export default function Home() {
               <span className="text-xl font-bold tracking-wider text-white">
                 CORE<span className="text-[#10b981] drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">X</span>
               </span>
-              <p className="text-[9px] text-gray-500 font-mono tracking-widest uppercase">Premium Gaming Setup</p>
             </div>
           </div>
 

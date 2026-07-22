@@ -6,8 +6,10 @@ import br.com.springjpa.ecommerce.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -67,15 +69,22 @@ public class ProdutoController {
         return ResponseEntity.ok(produto);
     }
 
-    @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> criarProduto(@RequestBody @Valid ProdutoRequestDTO dto){
-        var produto = produtoService.criarProduto(dto);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProdutoResponseDTO> criarProduto(
+            @RequestPart("dados") @Valid ProdutoRequestDTO dto,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem){
+
+        var produto = produtoService.criarProduto(dto,imagem);
         return ResponseEntity.status(HttpStatus.CREATED).body(produto);
     }
 
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Long id,@RequestBody @Valid ProdutoRequestDTO dto){
-        var  produto = produtoService.atualizarProduto(id, dto);
+    @PutMapping(value = "/atualizar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(
+            @PathVariable Long id,
+            @RequestPart("dados") @Valid ProdutoRequestDTO dto,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem) { // required = false é crucial aqui!
+
+        var produto = produtoService.atualizarProduto(id, dto, imagem);
         return ResponseEntity.ok(produto);
     }
 

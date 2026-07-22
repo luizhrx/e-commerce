@@ -1,0 +1,44 @@
+version: '2.4'
+
+services:
+  db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      # Criando o banco com o usuário padrão
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: luiz
+      POSTGRES_DB: corex_db
+    volumes:
+      # Mapeamento para não perder os produtos se o contêiner reiniciar
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # O healthcheck também precisa usar o mesmo usuário 'postgres' para testar
+      test: ["CMD-SHELL", "pg_isready -U postgres -d corex_db -h 127.0.0.1 -p 5432"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  app:
+    image: corex-app:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        # Só tenta ligar a API depois que o banco avisar que está 100% pronto
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASS}
+
+      JWT_SECRET: ${JWT_SECRET}
+      EXPIRATION: 86400000
+
+      CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      API_KEY: ${CLOUDINARY_API_KEY}
+      API_SECRET: ${CLOUDINARY_API_SECRET}
+volumes:
+  postgres_data:

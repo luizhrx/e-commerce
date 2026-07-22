@@ -4,6 +4,7 @@ import br.com.springjpa.ecommerce.dto.request.ProdutoRequestDTO;
 import br.com.springjpa.ecommerce.dto.response.ProdutoResponseDTO;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeJaCadastrada;
 import br.com.springjpa.ecommerce.infra.exception.EntidadeNaoEncontrada;
+import br.com.springjpa.ecommerce.infra.exception.ImagemNaoEnviada;
 import br.com.springjpa.ecommerce.model.ProdutoEntity;
 import br.com.springjpa.ecommerce.repository.CategoriaRepository;
 import br.com.springjpa.ecommerce.repository.ItemPedidoRepository;
@@ -11,7 +12,9 @@ import br.com.springjpa.ecommerce.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final CategoriaRepository categoriaRepository;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final CloudinaryService cloudinaryService;
 
 
     // Método para listar todos os produtos
@@ -90,9 +94,19 @@ public class ProdutoService {
     }
 
     // Método para criar um novo produto
-    public ProdutoResponseDTO criarProduto(ProdutoRequestDTO dto) {
+    public ProdutoResponseDTO criarProduto(ProdutoRequestDTO dto, MultipartFile imagem) {
         var categoria = categoriaRepository.findById(dto.categoriaId())
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Categoria não encontrada"));
+
+        String urlImagem = null;
+        if(imagem != null && !imagem.isEmpty()){
+            try {
+                // Manda a foto pro Cloudinary e pega o link gerado!
+                urlImagem = cloudinaryService.uploadImagem(imagem);
+            } catch (IOException e) {
+                throw new ImagemNaoEnviada("Falha ao enviar a imagem para a nuvem");
+            }
+        }
 
         var produto = new ProdutoEntity();
         produto.setNome(dto.nome());
@@ -100,14 +114,14 @@ public class ProdutoService {
         produto.setPreco(dto.preco());
         produto.setQuantidadeStock(dto.quantidadeStock());
         produto.setCategoria(categoria);
-        produto.setImagem(dto.imagem());
+        produto.setImagem(urlImagem);
 
         var produtoSalvo = produtoRepository.save(produto);
         return toResponseDTO(produtoSalvo);
     }
 
     // Método para atualizar um produto existente
-    public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO dto) {
+    public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO dto, MultipartFile imagem) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontrada("Produto não encontrado"));
 
@@ -119,7 +133,16 @@ public class ProdutoService {
         produto.setPreco(dto.preco());
         produto.setQuantidadeStock(dto.quantidadeStock());
         produto.setCategoria(categoria);
-        produto.setImagem(dto.imagem());
+
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                String urlImagem = cloudinaryService.uploadImagem(imagem);
+                produto.setImagem(urlImagem); // Substitui o link do Pinterest pelo novo da nuvem
+            } catch (IOException e) {
+                throw new ImagemNaoEnviada("Falha ao enviar a nova imagem para a nuvem");
+            }
+        }
+        produto.setImagem(produto.getImagem());
 
         var produtoAtualizado = produtoRepository.save(produto);
         return toResponseDTO(produtoAtualizado);

@@ -21,9 +21,6 @@ public record ProdutoRequestDTO(
         Integer quantidadeStock,
 
         @NotNull(message = "A categoria do produto é obrigatória")
-        Long categoriaId,
-
-        @NotBlank(message = "A URL da imagem do produto é obrigatória")
-        String imagem
+        Long categoriaId
 ) {
 }

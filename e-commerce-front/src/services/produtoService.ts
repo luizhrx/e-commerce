@@ -6,18 +6,16 @@ export interface Produto {
   descricao: string;
   preco: number;
   quantidadeStock: number;
-  categoriaNome: string; // Retornado no ResponseDTO do seu Java
-  imagem: string;
+  categoriaNome: string; 
+  imagem: string; 
 }
 
-// Interface EXATA do seu ProdutoRequestDTO
 export interface ProdutoRequest {
   nome: string;
   descricao: string;
   preco: number;
   quantidadeStock: number;
   categoriaId: number;
-  imagem: string;
 }
 
 const produtoService = {
@@ -55,14 +53,49 @@ const produtoService = {
     return response.data;
   },
 
-  async criarProduto(dados: ProdutoRequest): Promise<Produto> {
-    const response = await api.post<Produto>('/produtos', dados);
+  // --- ATUALIZADO: ENVIO COM IMAGEM PARA A NUVEM ---
+  async criarProduto(dados: ProdutoRequest, imagem: File | null): Promise<Produto> {
+    const formData = new FormData();
+
+    // 1. Transforma o DTO em um Blob JSON para o Spring Boot ler o texto
+    formData.append(
+      'dados',
+      new Blob([JSON.stringify(dados)], { type: 'application/json' })
+    );
+
+    // 2. Anexa a foto física
+    if (imagem) {
+      formData.append('imagem', imagem);
+    }
+
+    // 3. Dispara avisando que é multipart
+    const response = await api.post<Produto>('/produtos', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   },
 
-  // Atenção aqui: rota /atualizar/{id} conforme seu ProdutoController
-  async atualizarProduto(id: number, dados: ProdutoRequest): Promise<Produto> {
-    const response = await api.put<Produto>(`/produtos/atualizar/${id}`, dados);
+  async atualizarProduto(id: number, dados: ProdutoRequest, imagem: File | null): Promise<Produto> {
+    const formData = new FormData();
+
+    // Empacota o texto
+    formData.append(
+      'dados',
+      new Blob([JSON.stringify(dados)], { type: 'application/json' })
+    );
+
+    // Se o usuário selecionou uma foto nova, anexa. Se não, vai null e o Java ignora.
+    if (imagem) {
+      formData.append('imagem', imagem);
+    }
+
+    const response = await api.put<Produto>(`/produtos/atualizar/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   },
 

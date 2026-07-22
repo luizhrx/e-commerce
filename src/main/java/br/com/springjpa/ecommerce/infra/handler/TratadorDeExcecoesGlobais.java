@@ -165,5 +165,16 @@ public class TratadorDeExcecoesGlobais {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
     }
 
+    @ExceptionHandler(ImagemNaoEnviada.class)
+    public ResponseEntity<ErroResponse> tratarImagemNaoEnviada(ImagemNaoEnviada ex) {
+        String mensagem = "Falha ao enviar a imagem para a nuvem";
+
+        ErroResponse erro = new ErroResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                mensagem
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+    }
 
 }
