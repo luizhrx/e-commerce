@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   // O Vite vai procurar a URL no arquivo .env, se não achar, usa o localhost como segurança
-  baseURL: import.meta.env.VITE_API_URL ?? 'https://corex-api-6xid.onrender.com',
+  baseURL: import.meta.env.VITE_API_URL ?? 'https://corex-api-6r1d.onrender.com',
 });
 
 // Interceptor — adiciona o token em toda requisição automaticamente
