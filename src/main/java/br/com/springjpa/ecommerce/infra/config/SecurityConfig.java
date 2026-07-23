@@ -114,7 +114,7 @@ public class SecurityConfig {
                 "https://e-commerce-corex3.vercel.app"
         ));
         // 2. Libera os métodos (O OPTIONS é a estrela aqui)
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         // 3. Libera os cabeçalhos (Headers)
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         // 4. Permite credenciais
