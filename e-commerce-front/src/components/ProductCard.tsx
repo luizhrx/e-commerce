@@ -75,11 +75,14 @@ export default function ProductCard({ produto, index = 0 }: ProductCardProps) {
 
           <button
             onClick={handleAdd}
+            aria-label={`Adicionar ${produto.nome} ao carrinho`}
             className={`${
               foiAdicionado
                 ? 'bg-[#10b981] text-[#04140f] border-transparent shadow-[0_0_20px_rgba(16,185,129,0.4)]'
-                : 'bg-white/[0.04] text-gray-300 border-white/10 group-hover:bg-[#10b981] group-hover:text-[#04140f] group-hover:border-transparent group-hover:shadow-[0_0_20px_rgba(16,185,129,0.35)]'
-            } font-bold text-xs px-4 py-2.5 rounded-xl border transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative z-30 shrink-0`}
+                // Em telas de toque não há hover: o botão já nasce sólido (@media hover:none).
+                // No desktop mantém o efeito de revelar no group-hover.
+                : 'bg-white/[0.04] text-gray-300 border-white/10 group-hover:bg-[#10b981] group-hover:text-[#04140f] group-hover:border-transparent group-hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] [@media(hover:none)]:bg-[#10b981] [@media(hover:none)]:text-[#04140f] [@media(hover:none)]:border-transparent'
+            } font-bold text-xs px-4 py-3 sm:py-2.5 rounded-xl border transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative z-30 shrink-0 active:brightness-90`}
           >
             {foiAdicionado ? (
               <>

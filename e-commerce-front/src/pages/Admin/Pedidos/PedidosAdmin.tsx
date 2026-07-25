@@ -110,10 +110,11 @@ export default function PedidosAdmin() {
         </div>
       ) : (
         <div className="bg-[#121212]/80 border border-[#1c1c1c] rounded-2xl overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[700px]">
+          <table className="w-full text-left border-collapse min-w-[820px]">
             <thead>
               <tr className="bg-[#161616] border-b border-[#1c1c1c]">
                 <th className="py-4 px-6 text-[10px] font-mono text-gray-500 uppercase font-semibold">ID do Pedido</th>
+                <th className="py-4 px-6 text-[10px] font-mono text-gray-500 uppercase font-semibold">Cliente</th>
                 <th className="py-4 px-6 text-[10px] font-mono text-gray-500 uppercase font-semibold">Data da Compra</th>
                 <th className="py-4 px-6 text-[10px] font-mono text-gray-500 uppercase font-semibold text-right">Valor Total</th>
                 <th className="py-4 px-6 text-[10px] font-mono text-gray-500 uppercase font-semibold text-right w-48">Alterar Status</th>
@@ -122,12 +123,27 @@ export default function PedidosAdmin() {
             <tbody>
               {pedidos.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-10 text-center text-xs text-gray-500">Nenhum pedido registrado.</td>
+                  <td colSpan={5} className="py-10 text-center text-xs text-gray-500">Nenhum pedido registrado.</td>
                 </tr>
               ) : (
                 pedidos.map((pedido) => (
                   <tr key={pedido.id} className="border-b border-[#1c1c1c]/50 hover:bg-[#161616]/50 transition-colors">
                     <td className="py-4 px-6 text-sm font-bold text-gray-200">#{pedido.id}</td>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#181818] to-[#2a2a2a] border border-white/10 flex items-center justify-center text-gray-300 font-bold text-[10px] uppercase shrink-0">
+                          {(pedido.usuarioNome ?? '?').substring(0, 2).toUpperCase()}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-sm font-semibold text-gray-200 truncate">
+                            {pedido.usuarioNome ?? 'Cliente não identificado'}
+                          </span>
+                          {pedido.usuarioEmail && (
+                            <span className="text-[11px] text-gray-500 font-mono truncate">{pedido.usuarioEmail}</span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
                     <td className="py-4 px-6 text-xs text-gray-400 font-mono">{formatarData(pedido.dataCriacao)}</td>
                     <td className="py-4 px-6 text-right text-sm font-mono text-[#10b981] font-bold">
                       R$ {pedido.valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}

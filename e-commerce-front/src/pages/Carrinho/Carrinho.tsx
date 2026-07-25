@@ -114,9 +114,9 @@ export default function Carrinho() {
                       initial={{ opacity: 0, x: -15 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 15 }}
-                      className="p-5 rounded-2xl bg-white/[0.025] border border-white/5 backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.45)] flex flex-col sm:flex-row items-center justify-between gap-5 group hover:border-[#10b981]/25 hover:-translate-y-0.5 transition-all duration-300"
+                      className="p-4 sm:p-5 rounded-2xl bg-white/[0.025] border border-white/5 backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.45)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-5 group hover:border-[#10b981]/25 hover:-translate-y-0.5 transition-all duration-300"
                     >
-                      <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                      <div className="flex flex-row items-center gap-4 w-full sm:w-auto min-w-0">
                         <div
                           className="w-16 h-16 rounded-xl bg-[#161616] border border-white/5 flex items-center justify-center shrink-0 cursor-pointer overflow-hidden"
                           onClick={() => navigate(`/produto/${item.id}`)}
@@ -133,12 +133,12 @@ export default function Carrinho() {
                           )}
                         </div>
 
-                        <div className="text-center sm:text-left space-y-1">
+                        <div className="text-left space-y-1 min-w-0 flex-1">
                           <span className="text-[9px] font-bold font-mono tracking-wider text-[#10b981] uppercase">
                             {item.categoriaNome}
                           </span>
-                          <h3 
-                            className="text-sm font-bold text-white hover:text-[#10b981] transition-colors cursor-pointer leading-tight"
+                          <h3
+                            className="text-sm font-bold text-white hover:text-[#10b981] transition-colors cursor-pointer leading-tight line-clamp-2"
                             onClick={() => navigate(`/produto/${item.id}`)}
                           >
                             {item.nome}
@@ -149,32 +149,32 @@ export default function Carrinho() {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto border-t border-white/5 sm:border-0 pt-4 sm:pt-0">
+                      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6 w-full sm:w-auto border-t border-white/5 sm:border-0 pt-4 sm:pt-0 shrink-0">
 
-                        <div className="flex items-center gap-2.5 bg-black/25 border border-white/5 rounded-xl p-1">
+                        <div className="flex items-center gap-1 bg-black/25 border border-white/5 rounded-xl p-1">
                           <button
                             onClick={() => atualizarQuantidade(item.id, item.quantidadeSelecionada - 1)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                            className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 active:bg-white/15 transition-all cursor-pointer"
                             aria-label={`Remover uma unidade de ${item.nome}`}
                           >
-                            <Minus className="w-3 h-3" />
+                            <Minus className="w-4 h-4" />
                           </button>
 
-                          <span className="text-xs font-bold text-white w-6 text-center font-mono select-none">
+                          <span className="text-sm font-bold text-white w-7 text-center font-mono select-none">
                             {item.quantidadeSelecionada}
                           </span>
 
                           <button
                             onClick={() => atualizarQuantidade(item.id, item.quantidadeSelecionada + 1)}
                             disabled={item.quantidadeSelecionada >= item.quantidadeStock}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                            className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 active:bg-white/15 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
                             aria-label={`Adicionar uma unidade de ${item.nome}`}
                           >
-                            <Plus className="w-3 h-3" />
+                            <Plus className="w-4 h-4" />
                           </button>
                         </div>
 
-                        <div className="text-right flex flex-col min-w-[80px]">
+                        <div className="text-right flex flex-col min-w-[72px] sm:min-w-[80px]">
                           <span className="text-[9px] text-gray-500 font-mono">TOTAL</span>
                           <span className="text-sm font-extrabold text-white font-mono">
                             R$ {(item.preco * item.quantidadeSelecionada).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
@@ -183,7 +183,7 @@ export default function Carrinho() {
 
                         <button
                           onClick={() => removerDoCarrinho(item.id)}
-                          className="p-2 rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-all cursor-pointer"
+                          className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-950/20 active:bg-red-950/30 transition-all cursor-pointer shrink-0"
                           aria-label={`Remover ${item.nome} do carrinho`}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -206,7 +206,7 @@ export default function Carrinho() {
               </div>
 
               <div className="lg:col-span-1">
-                <div className="p-6 rounded-2xl bg-white/[0.025] backdrop-blur-xl border border-white/5 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)] space-y-6 sticky top-28">
+                <div className="p-5 sm:p-6 rounded-2xl bg-white/[0.025] backdrop-blur-xl border border-white/5 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)] space-y-6 lg:sticky lg:top-28">
 
                   <h2 className="text-base font-bold text-white tracking-wide border-b border-white/5 pb-4">
                     Resumo do Pedido

@@ -208,10 +208,10 @@ export default function Checkout() {
         </div>
       </nav>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-14 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
 
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white/[0.025] backdrop-blur-xl border border-white/5 rounded-2xl p-6 md:p-8 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)] relative overflow-hidden">
+          <div className="bg-white/[0.025] backdrop-blur-xl border border-white/5 rounded-2xl p-5 sm:p-6 md:p-8 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)] relative overflow-hidden">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
               <MapPin className="w-5 h-5 text-[#10b981]" />
               Endereço de Entrega
@@ -311,7 +311,7 @@ export default function Checkout() {
             )}
           </div>
 
-          <div className="bg-white/[0.025] backdrop-blur-xl border border-white/5 rounded-2xl p-6 md:p-8 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div className="bg-white/[0.025] backdrop-blur-xl border border-white/5 rounded-2xl p-5 sm:p-6 md:p-8 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)]">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
               <CreditCard className="w-5 h-5 text-[#10b981]" />
               Pagamento <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded font-mono uppercase ml-2 border border-amber-500/20">Simulação</span>
@@ -332,7 +332,7 @@ export default function Checkout() {
         </div>
 
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white/[0.025] backdrop-blur-xl border border-white/5 rounded-2xl p-6 md:p-8 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)] sticky top-28">
+          <div className="bg-white/[0.025] backdrop-blur-xl border border-white/5 rounded-2xl p-5 sm:p-6 md:p-8 shadow-[0_16px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)] lg:sticky lg:top-28">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
               <ShoppingBag className="w-5 h-5 text-[#10b981]" />
               Resumo do Pedido
@@ -375,7 +375,7 @@ export default function Checkout() {
                 )}
               </div>
               
-              <div className="flex justify-between items-end pt-4 mt-2 border-t border-gray-800/50">
+              <div className="flex justify-between items-end pt-4 mt-2 border-t border-white/5">
                 <span className="text-sm font-bold text-white uppercase tracking-wider">Total</span>
                 <span className="text-2xl font-black text-[#10b981] font-mono">
                   R$ {totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
