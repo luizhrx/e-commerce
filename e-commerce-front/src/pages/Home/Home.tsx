@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import {
   ShoppingBag, LogOut, RefreshCw, AlertCircle, ArrowRight,
-  Package, PackageOpen, Zap
+  Package, PackageOpen, Zap, Menu, X, LayoutDashboard
 } from 'lucide-react';
 
 import { useCart } from '../../context/CartContext';
@@ -18,6 +19,9 @@ export default function Home() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const { cartItems } = useCart();
+
+  // Controla o drawer de navegação no mobile (< md). No desktop a nav é inline.
+  const [menuMobileAberto, setMenuMobileAberto] = useState(false);
 
   const {
     produtos, categorias, loading, error, isSandboxMode,
@@ -41,7 +45,13 @@ export default function Home() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const irPara = (rota: string) => {
+    setMenuMobileAberto(false);
+    navigate(rota);
+  };
+
   const handleLogout = () => {
+    setMenuMobileAberto(false);
     logout();
     navigate('/login');
   };
@@ -50,6 +60,8 @@ export default function Home() {
     (acc, item) => acc + item.quantidadeSelecionada,
     0
   );
+
+  const iniciais = user?.nome ? user.nome.substring(0, 2).toUpperCase() : 'CX';
 
   return (
     <div className="relative min-h-screen bg-[#0a0a0a] text-gray-100 flex flex-col font-sans selection:bg-[#10b981]/30 selection:text-[#10b981]">
@@ -72,25 +84,28 @@ export default function Home() {
       </div>
 
       <nav className="sticky top-0 z-50 bg-[#0a0a0a]/70 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
 
-          <div className="flex items-center gap-3">
-            <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-tr from-[#141414] to-[#1e1e1e] border border-[#10b981]/20 shadow-[0_0_25px_rgba(16,185,129,0.12),inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <button
+            onClick={() => irPara('/')}
+            className="flex items-center gap-3 cursor-pointer"
+            aria-label="Página inicial CoreX"
+          >
+            <div className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-tr from-[#141414] to-[#1e1e1e] border border-[#10b981]/20 shadow-[0_0_25px_rgba(16,185,129,0.12),inset_0_1px_0_rgba(255,255,255,0.06)]">
               <ShoppingBag className="w-5 h-5 text-[#10b981]" />
               <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
             </div>
-            <div>
-              <span className="text-xl font-bold tracking-wider text-white">
-                CORE<span className="text-[#10b981] drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">X</span>
-              </span>
-            </div>
-          </div>
+            <span className="text-xl font-bold tracking-wider text-white">
+              CORE<span className="text-[#10b981] drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">X</span>
+            </span>
+          </button>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* AÇÕES DESKTOP (md+) — layout original preservado */}
+          <div className="hidden md:flex items-center gap-2 sm:gap-3">
             {user?.role === 'ADMIN' && (
               <button
                 onClick={() => navigate('/admin')}
-                className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 text-[#10b981] text-xs font-semibold hover:bg-[#10b981]/15 hover:border-[#10b981]/40 transition-all cursor-pointer">
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 text-[#10b981] text-xs font-semibold hover:bg-[#10b981]/15 hover:border-[#10b981]/40 transition-all cursor-pointer">
                 <span>Painel Admin</span>
               </button>
             )}
@@ -100,7 +115,7 @@ export default function Home() {
               className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 text-gray-300 hover:text-white hover:border-white/15 hover:bg-white/[0.06] transition-all text-xs font-semibold cursor-pointer"
             >
               <Package className="w-4 h-4 text-[#10b981]" />
-              <span className="hidden sm:block">Meus Pedidos</span>
+              <span>Meus Pedidos</span>
             </button>
 
             <button
@@ -116,14 +131,14 @@ export default function Home() {
             </button>
 
             <div className="flex items-center gap-3 bg-white/[0.03] border border-white/5 pl-3.5 pr-2 py-1.5 rounded-xl">
-              <div className="hidden md:flex flex-col items-end">
+              <div className="flex flex-col items-end">
                 <span className="text-xs font-medium text-gray-200">{user?.nome}</span>
                 <span className="text-[9px] text-[#10b981] font-mono tracking-wider uppercase">
                   {user?.role}
                 </span>
               </div>
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#181818] to-[#2a2a2a] border border-white/10 flex items-center justify-center text-gray-300 font-bold text-xs uppercase">
-                {user?.nome ? user.nome.substring(0, 2).toUpperCase() : 'CX'}
+                {iniciais}
               </div>
               <button
                 onClick={handleLogout}
@@ -134,8 +149,107 @@ export default function Home() {
               </button>
             </div>
           </div>
+
+          {/* AÇÕES MOBILE (< md) — carrinho sempre visível + hambúrguer */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={() => navigate('/carrinho')}
+              aria-label="Abrir carrinho"
+              className="relative w-11 h-11 rounded-xl bg-white/[0.03] border border-white/5 text-gray-300 active:bg-white/[0.08] transition-all flex items-center justify-center"
+            >
+              <ShoppingBag className="w-5 h-5 text-[#10b981]" />
+              {totalItensCarrinho > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#10b981] text-[#0a0a0a] text-[9px] font-black min-w-4.5 h-4.5 px-1 rounded-full flex items-center justify-center font-mono shadow-[0_0_12px_rgba(16,185,129,0.6)]">
+                  {totalItensCarrinho}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setMenuMobileAberto((v) => !v)}
+              aria-label={menuMobileAberto ? 'Fechar menu' : 'Abrir menu'}
+              aria-expanded={menuMobileAberto}
+              className="w-11 h-11 rounded-xl bg-white/[0.03] border border-white/5 text-gray-200 active:bg-white/[0.08] transition-all flex items-center justify-center"
+            >
+              {menuMobileAberto ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* DRAWER MOBILE */}
+        <AnimatePresence>
+          {menuMobileAberto && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="md:hidden overflow-hidden border-t border-white/5 bg-[#0a0a0a]/95 backdrop-blur-xl"
+            >
+              <div className="px-4 py-4 space-y-1.5">
+                <div className="flex items-center gap-3 px-2 py-3 mb-1 border-b border-white/5">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#181818] to-[#2a2a2a] border border-white/10 flex items-center justify-center text-gray-300 font-bold text-sm uppercase shrink-0">
+                    {iniciais}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-white truncate">{user?.nome ?? 'Visitante'}</p>
+                    <p className="text-[10px] text-[#10b981] font-mono tracking-wider uppercase">{user?.role}</p>
+                  </div>
+                </div>
+
+                {user?.role === 'ADMIN' && (
+                  <button
+                    onClick={() => irPara('/admin')}
+                    className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 text-[#10b981] text-sm font-semibold active:bg-[#10b981]/15 transition-all"
+                  >
+                    <LayoutDashboard className="w-5 h-5" />
+                    <span>Painel Admin</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={() => irPara('/pedidos')}
+                  className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-gray-200 text-sm font-semibold active:bg-white/[0.08] transition-all"
+                >
+                  <Package className="w-5 h-5 text-[#10b981]" />
+                  <span>Meus Pedidos</span>
+                </button>
+
+                <button
+                  onClick={() => irPara('/carrinho')}
+                  className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-gray-200 text-sm font-semibold active:bg-white/[0.08] transition-all"
+                >
+                  <ShoppingBag className="w-5 h-5 text-[#10b981]" />
+                  <span>Carrinho</span>
+                  {totalItensCarrinho > 0 && (
+                    <span className="ml-auto bg-[#10b981] text-[#0a0a0a] text-[10px] font-black min-w-5 h-5 px-1.5 rounded-full flex items-center justify-center font-mono">
+                      {totalItensCarrinho}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-red-400 text-sm font-semibold active:bg-red-950/20 transition-all"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Sair</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
+
+      {/* Fecha o menu ao tocar fora dele */}
+      {menuMobileAberto && (
+        <button
+          type="button"
+          aria-label="Fechar menu"
+          onClick={() => setMenuMobileAberto(false)}
+          className="md:hidden fixed inset-0 top-16 z-40 bg-black/50 cursor-default"
+        />
+      )}
 
       {isSandboxMode && (
         <div className="relative z-10 bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 flex items-center justify-center gap-2 text-amber-400 text-[10px] font-mono tracking-widest uppercase text-center">
@@ -144,7 +258,7 @@ export default function Home() {
         </div>
       )}
 
-      <section className="relative z-10 overflow-hidden px-4 sm:px-6 lg:px-8 pt-20 pb-24 md:pt-28 md:pb-32">
+      <section className="relative z-10 overflow-hidden px-4 sm:px-6 lg:px-8 pt-12 pb-16 sm:pt-20 sm:pb-24 md:pt-28 md:pb-32">
         <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
 
           <motion.span
@@ -161,7 +275,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.08 }}
-            className="mt-8 text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.08]"
+            className="mt-6 sm:mt-8 text-[2rem] sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] md:leading-[1.08]"
           >
             Equipamentos de alta performance{' '}
             <span className="bg-gradient-to-r from-[#10b981] via-[#34d399] to-[#06b6d4] bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(16,185,129,0.25)]">
@@ -173,7 +287,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.16 }}
-            className="mt-7 text-sm sm:text-base text-gray-400 leading-relaxed max-w-xl"
+            className="mt-5 sm:mt-7 text-sm sm:text-base text-gray-400 leading-relaxed max-w-xl"
           >
             Eleve sua jogabilidade e produtividade com os componentes mais requisitados
             do cenário gamer. Desempenho extremo, ergonomia incomparável e qualidade
@@ -184,11 +298,11 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.24 }}
-            className="mt-10"
+            className="mt-8 sm:mt-10 w-full sm:w-auto"
           >
             <button
               onClick={rolarParaProdutos}
-              className="group relative overflow-hidden bg-gradient-to-r from-[#059669] to-[#10b981] text-[#04140f] font-bold text-sm px-8 py-4 rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(16,185,129,0.25)] hover:shadow-[0_10px_45px_rgba(16,185,129,0.5)] hover:-translate-y-0.5 flex items-center gap-2.5 cursor-pointer"
+              className="group relative overflow-hidden w-full sm:w-auto bg-gradient-to-r from-[#059669] to-[#10b981] text-[#04140f] font-bold text-sm px-8 py-4 rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(16,185,129,0.25)] hover:shadow-[0_10px_45px_rgba(16,185,129,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer"
             >
               {/* Varredura de brilho no hover */}
               <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out bg-gradient-to-r from-transparent via-white/40 to-transparent" />
@@ -201,9 +315,9 @@ export default function Home() {
 
       <main
         id="vitrine-produtos"
-        className="relative z-10 flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-28 w-full scroll-mt-24"
+        className="relative z-10 flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28 w-full scroll-mt-20 md:scroll-mt-24"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
 
           <ProductFilters
             buscaNome={buscaNome} setBuscaNome={setBuscaNome}
@@ -238,7 +352,7 @@ export default function Home() {
 
             {loading ? (
               /* Skeletons preservam o layout do grid enquanto carrega */
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
@@ -265,7 +379,7 @@ export default function Home() {
                 </p>
                 <button
                   onClick={limparFiltros}
-                  className="mt-6 text-xs font-semibold text-[#10b981] flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 hover:bg-[#10b981]/15 transition-all cursor-pointer"
+                  className="mt-6 text-xs font-semibold text-[#10b981] flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 hover:bg-[#10b981]/15 transition-all cursor-pointer"
                 >
                   <RefreshCw className="w-3.5 h-3.5" /> Limpar Busca
                 </button>
@@ -278,7 +392,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -14 }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6"
                 >
                   {produtosExibidos.map((produto, index) => (
                     <ProductCard key={produto.id} produto={produto} index={index} />
@@ -301,9 +415,10 @@ export default function Home() {
       </main>
 
       <footer className="relative z-10 bg-[#070707] border-t border-white/5 py-8 px-4 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-mono">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 font-mono text-center">
           <p>© 2026 CoreX E-Commerce. Todos os direitos reservados.</p>
           <span className="flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-[#10b981]" /> Premium Gaming Setup
           </span>
         </div>
       </footer>

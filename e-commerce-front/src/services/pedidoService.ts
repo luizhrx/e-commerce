@@ -5,6 +5,10 @@ export interface Pedido {
   dataCriacao: string;
   status: 'PENDENTE' | 'PAGO' | 'ENVIADO' | 'CANCELADO' | 'ENTREGUE';
   valorTotal: number;
+  // Preenchidos pelo backend nas rotas de ADMIN (GET /pedidos). Opcionais porque
+  // dados simulados e telas do cliente não os utilizam.
+  usuarioNome?: string;
+  usuarioEmail?: string;
 }
 
 export interface DashboardStatus {
