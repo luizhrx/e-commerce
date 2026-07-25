@@ -211,6 +211,8 @@ public class PedidoService {
                 pedido.getDataCriacao(),
                 pedido.getStatus(),
                 pedido.getValorTotal(),
+                pedido.getUsuario().getNome(),
+                pedido.getUsuario().getEmail(),
                 toEnderecoDTO(pedido.getEnderecoEntrega()),
                 pedido.getItens().stream()
                         .map(this::toItemDTO)
