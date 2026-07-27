@@ -133,9 +133,11 @@ export default function Home() {
             <div className="flex items-center gap-3 bg-white/[0.03] border border-white/5 pl-3.5 pr-2 py-1.5 rounded-xl">
               <div className="flex flex-col items-end">
                 <span className="text-xs font-medium text-gray-200">{user?.nome}</span>
-                <span className="text-[9px] text-[#10b981] font-mono tracking-wider uppercase">
-                  {user?.role}
-                </span>
+                {user?.role === 'ADMIN' && (
+                  <span className="text-[9px] text-[#10b981] font-mono tracking-wider uppercase">
+                    {user?.role}
+                  </span>
+                )}
               </div>
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#181818] to-[#2a2a2a] border border-white/10 flex items-center justify-center text-gray-300 font-bold text-xs uppercase">
                 {iniciais}
@@ -193,7 +195,9 @@ export default function Home() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-white truncate">{user?.nome ?? 'Visitante'}</p>
-                    <p className="text-[10px] text-[#10b981] font-mono tracking-wider uppercase">{user?.role}</p>
+                    {user?.role === 'ADMIN' && (
+                      <p className="text-[10px] text-[#10b981] font-mono tracking-wider uppercase">{user?.role}</p>
+                    )}
                   </div>
                 </div>
 
